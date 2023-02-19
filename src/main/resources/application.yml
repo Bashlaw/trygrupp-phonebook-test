@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+max-pull-size: 100
+
+spring:
+  application:
+    name: phonebook
+  datasource:
+    username: ${SQL_USER}
+    password: ${SQL_PASSWORD}
+    db: ${SQL_DB}
+    host: ${SQL_HOST}
+    url: jdbc:postgresql://${spring.datasource.host}/${spring.datasource.db}?user=${spring.datasource.username}&password=${spring.datasource.password}
+  jpa:
+    hibernate:
+      ddl-auto: ${SQL_DLL}
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL81Dialect
