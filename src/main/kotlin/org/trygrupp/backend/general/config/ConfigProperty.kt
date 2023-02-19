@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Configuration
 class ConfigProperty {
 
     @Value("\${max-pull-size}")
-    private val paystackSecret: String? = null
+    private val maxPullSize: String? = null
 
 }

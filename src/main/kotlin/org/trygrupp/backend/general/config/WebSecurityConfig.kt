@@ -9,6 +9,7 @@ import java.util.*
 
 @Configuration
 class WebSecurityConfig {
+
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
@@ -21,4 +22,5 @@ class WebSecurityConfig {
         source.registerCorsConfiguration("/**", configuration)
         return source
     }
+
 }

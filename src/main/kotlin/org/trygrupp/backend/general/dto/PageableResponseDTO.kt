@@ -3,10 +3,10 @@ package org.trygrupp.backend.general.dto
 import lombok.Data
 
 @Data
-class PageableResponseDTO {
+open class PageableResponseDTO {
 
-    private val hasNextRecord = false
+    val hasNextRecord = false
 
-    private val totalCount = 0
+    val totalCount = 0
 
 }
