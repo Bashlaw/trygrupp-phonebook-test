@@ -5,8 +5,8 @@ import lombok.Data
 @Data
 open class PageableResponseDTO {
 
-    val hasNextRecord = false
+    var hasNextRecord = false
 
-    val totalCount = 0
+    var totalCount = 0
 
 }

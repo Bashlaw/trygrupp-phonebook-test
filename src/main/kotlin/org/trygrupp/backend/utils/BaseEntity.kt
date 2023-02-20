@@ -19,9 +19,9 @@ abstract class BaseEntity {
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
-    private val createdAt: LocalDateTime? = null
+    var createdAt: LocalDateTime? = null
 
     @UpdateTimestamp
-    private val updatedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = null
 
 }
