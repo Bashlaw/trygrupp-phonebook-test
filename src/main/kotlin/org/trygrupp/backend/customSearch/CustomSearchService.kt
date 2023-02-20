@@ -6,6 +6,6 @@ import org.trygrupp.backend.contact.model.Contact
 
 interface CustomSearchService {
 
-    fun searchContact(dto: ContactListRequestDTO): Page<Contact?>?
+    fun searchContact(dto: ContactListRequestDTO?): Page<Contact?>?
 
 }

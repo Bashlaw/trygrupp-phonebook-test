@@ -36,11 +36,10 @@ class ContactController {
     @GetMapping("/single/{phoneNumber}")
     fun getSingle(@PathVariable("phoneNumber") phoneNumber: @Valid String?): Response? {
         val data = contactService.getSingle(phoneNumber)
-        println(data)
         return generalService.prepareSuccessResponse(data)
     }
 
-    @GetMapping("/multiple")
+    @PutMapping("/multiple")
     fun getMultiple(@RequestBody dto: @Valid ContactListRequestDTO?): Response? {
         val data = contactService.getContacts(dto)
         return generalService.prepareSuccessResponse(data)

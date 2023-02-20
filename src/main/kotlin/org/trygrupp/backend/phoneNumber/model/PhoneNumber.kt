@@ -4,9 +4,7 @@ import lombok.*
 import org.hibernate.annotations.Proxy
 import org.springframework.beans.BeanUtils
 import org.trygrupp.backend.phoneNumber.dto.PhoneNumberDTO
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 @Getter
@@ -18,7 +16,7 @@ import javax.persistence.Id
 class PhoneNumber {
 
     @Id
-    @Column(unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
     @Column(nullable = false)

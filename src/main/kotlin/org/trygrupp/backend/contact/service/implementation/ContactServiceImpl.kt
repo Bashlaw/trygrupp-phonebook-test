@@ -3,6 +3,7 @@ package org.trygrupp.backend.contact.service.implementation
 import lombok.RequiredArgsConstructor
 import lombok.extern.slf4j.Slf4j
 import org.slf4j.LoggerFactory
+import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
@@ -42,7 +43,7 @@ class ContactServiceImpl : ContactService {
 
         //perform checks before creation
         createChecks(dto)
-        val contact = Contact()
+        var contact = Contact()
         contact.address = dto!!.address
         contact.delFlag = false
         contact.name = dto.name
@@ -53,15 +54,19 @@ class ContactServiceImpl : ContactService {
 
         //save phone numbers
         phoneNumberService.addList(phoneNoList)
+
         val phoneNumbers: MutableList<PhoneNumber> = ArrayList()
         for (phoneNumber in phoneNos) {
-            //save phone numbers
             val number = PhoneNumber()
             number.phoneNo = phoneNumber
             phoneNumbers.add(number)
         }
         contact.phoneNumbers = phoneNumbers
-        return Contact.getContactDTO(contact)
+
+        //save to DB
+        contact = contactRepository.save(contact)
+
+        return this.getContactDTO(contact)
     }
 
     override fun delete(name: String?): Boolean {
@@ -78,6 +83,7 @@ class ContactServiceImpl : ContactService {
 
         //save to DB
         contactRepository.save(contact)
+
         return true
     }
 
@@ -87,14 +93,14 @@ class ContactServiceImpl : ContactService {
             throw GeneralException("contact not found!")
         }
 
-        return Contact.getContactDTO(
+        return this.getContactDTO(
             Objects.requireNonNull<Contact?>(
                 contactRepository.findContactByName(name)
             )
         )
     }
 
-    override fun getContacts(dto: ContactListRequestDTO): ContactListDTO? {
+    override fun getContacts(dto: ContactListRequestDTO?): ContactListDTO? {
         val contactPage = customSearchService.searchContact(dto)
         return getContactListDTO(contactPage)
     }
@@ -113,7 +119,7 @@ class ContactServiceImpl : ContactService {
             listDTO.hasNextRecord = contactPage.hasNext()
             listDTO.totalCount = contactPage.totalElements.toInt()
         }
-        val contactDTOs = contactList.stream().map { contact -> contact?.let { Contact.getContactDTO(it) } }
+        val contactDTOs = contactList.stream().map { contact -> contact?.let { this.getContactDTO(it) } }
             .collect(Collectors.toList())
         listDTO.contactDTOs = contactDTOs
         return listDTO
@@ -137,6 +143,16 @@ class ContactServiceImpl : ContactService {
             throw GeneralException("name already exits for another contact!")
         }
 
+    }
+
+    fun getContactDTO(contact: Contact): ContactDTO {
+        val contactDTO = ContactDTO()
+        BeanUtils.copyProperties(contact, contactDTO)
+
+        //set phone number
+        contactDTO.phoneNumber = phoneNumberService.getPhoneNos(contact.id) as List<String>?
+
+        return contactDTO
     }
 
 }

@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode
 @EqualsAndHashCode(callSuper = true)
 open class SearchListRequestDTO : PageableRequestDTO() {
 
-    val fromDate: String? = null
+    var fromDate: String? = null
 
-    val toDate: String? = null
+    var toDate: String? = null
 
 }

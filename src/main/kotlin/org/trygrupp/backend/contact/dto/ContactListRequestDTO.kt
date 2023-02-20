@@ -8,10 +8,10 @@ import org.trygrupp.backend.general.dto.SearchListRequestDTO
 @EqualsAndHashCode(callSuper = true)
 class ContactListRequestDTO : SearchListRequestDTO() {
 
-    lateinit var name: String
+    var name: String? = null
 
-    lateinit var address: String
+    var address: String? = null
 
-    lateinit var phoneNumber: String
+    var phoneNumber: String? = null
 
 }

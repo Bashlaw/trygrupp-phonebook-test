@@ -42,7 +42,7 @@ class CustomSearchServiceIml : CustomSearchService {
     @PersistenceContext
     lateinit var em: EntityManager
 
-    override fun searchContact(dto: ContactListRequestDTO): Page<Contact?>? {
+    override fun searchContact(dto: ContactListRequestDTO?): Page<Contact?>? {
         log.info("search through contact...")
 
         val cb = em.criteriaBuilder
@@ -55,30 +55,32 @@ class CustomSearchServiceIml : CustomSearchService {
         )
         val predicates: MutableList<Predicate> = ArrayList()
 
-        if (valid(dto.name)) {
-            predicates.add(cb.like(cb.lower(root.get("name")), '%'.toString() + dto.name.lowercase() + '%'))
+        if (valid(dto?.name)) {
+            predicates.add(cb.like(cb.lower(root.get("name")), '%'.toString() + dto?.name!!.lowercase() + '%'))
         }
 
-        if (valid(dto.address)) {
-            predicates.add(cb.like(cb.lower(root.get("address")), '%'.toString() + dto.address.lowercase() + '%'))
+        if (valid(dto?.address)) {
+            predicates.add(cb.like(cb.lower(root.get("address")), '%'.toString() + dto?.address!!.lowercase() + '%'))
         }
 
         //see if search phone number exist
-        val phoneIds = phoneNumberService.searchPhoneNo(dto.phoneNumber)!!
-        if (phoneIds.isNotEmpty()) {
-            for (id in phoneIds) {
-                predicates.add(cb.equal(root.get<Any>("phoneNumbersId"), id))
+        if (valid(dto?.phoneNumber)) {
+            val phoneIds = phoneNumberService.searchPhoneNo(dto?.phoneNumber)!!
+            if (phoneIds.isNotEmpty()) {
+                for (id in phoneIds) {
+                    predicates.add(cb.equal(root.get<Any>("id"), id))
+                }
             }
         }
 
-        verifyQueryDate(cb, predicates, dto.fromDate, dto.toDate, root.get("createdAt"))
+        verifyQueryDate(cb, predicates, dto?.fromDate, dto?.toDate, root.get("createdAt"))
 
         //cq.where(*predicates.toArray<Predicate>(arrayOf<Predicate>()))
         cq.where(*predicates.toTypedArray())
-        cq.orderBy(cb.desc(root.get<Any>("createdAt")))
+        cq.orderBy(cb.desc(root.get<Any>("name")))
         val query: TypedQuery<*> = em.createQuery(cq)
 
-        return getPage(dto.page, dto.size, query) as Page<Contact?>
+        return dto?.page?.let { getPage(it, dto.size, query) } as Page<Contact?>
     }
 
     private fun valid(value: String?): Boolean {
