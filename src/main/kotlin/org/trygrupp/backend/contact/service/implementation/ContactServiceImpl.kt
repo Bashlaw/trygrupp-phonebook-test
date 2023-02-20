@@ -67,6 +67,7 @@ class ContactServiceImpl : ContactService {
         if (contactRepository!!.existsByNameAndDelFlag(name, true)) {
             throw GeneralException("contact not found!")
         }
+
         val contact = contactRepository.findContactByName(name)!!
         contact.delFlag = true
         contact.updatedAt = LocalDateTime.now()
