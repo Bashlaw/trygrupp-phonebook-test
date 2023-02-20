@@ -8,4 +8,6 @@ interface PhoneNumberService {
 
     fun getPhoneNos(contactId: Long?): List<String?>?
 
+    fun searchPhoneNo(phoneNo: String?): List<Long?>?
+
 }

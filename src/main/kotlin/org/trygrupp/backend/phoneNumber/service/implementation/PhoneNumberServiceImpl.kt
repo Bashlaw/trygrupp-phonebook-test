@@ -45,4 +45,8 @@ class PhoneNumberServiceImpl : PhoneNumberService {
         return phoneNumberRepository!!.getPhoneNums(contactId)
     }
 
+    override fun searchPhoneNo(phoneNo: String?): List<Long?>? {
+        return phoneNumberRepository!!.getPhoneIds(phoneNo)
+    }
+
 }

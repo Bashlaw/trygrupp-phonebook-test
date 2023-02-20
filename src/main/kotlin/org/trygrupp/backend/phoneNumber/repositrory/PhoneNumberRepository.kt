@@ -12,4 +12,10 @@ interface PhoneNumberRepository : JpaRepository<PhoneNumber?, Long?> {
     )
     fun getPhoneNums(contactId: Long?): List<String?>?
 
+    @Query(
+        value = "select p.id from phone_number p where lower(p.phone_no) like ('%' || lower(:searchText) || '%')",
+        nativeQuery = true
+    )
+    fun getPhoneIds(searchText: String?): List<Long?>?
+
 }
