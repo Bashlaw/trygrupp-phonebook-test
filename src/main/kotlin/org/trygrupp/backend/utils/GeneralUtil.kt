@@ -12,10 +12,4 @@ object GeneralUtil {
         return Objects.isNull(value) || value.isEmpty()
     }
 
-    @JvmStatic
-    fun main(args: Array<String>) {
-        val reference = "test_20191123132233"
-        log.info(LocalDateTime.parse("2022-12-13T00:00:00").toString())
-    }
-
 }
