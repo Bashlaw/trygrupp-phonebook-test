@@ -3,6 +3,7 @@ package org.trygrupp.backend.contact.service.implementation
 import lombok.RequiredArgsConstructor
 import lombok.extern.slf4j.Slf4j
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import org.trygrupp.backend.contact.dto.ContactDTO
@@ -27,11 +28,14 @@ class ContactServiceImpl : ContactService {
 
     private val log = LoggerFactory.getLogger(this::class.java)
 
-    private val contactRepository: ContactRepository? = null
+    @Autowired
+    lateinit var contactRepository: ContactRepository
 
-    private val phoneNumberService: PhoneNumberService? = null
+    @Autowired
+    lateinit var phoneNumberService: PhoneNumberService
 
-    private val customSearchService: CustomSearchService? = null
+    @Autowired
+    lateinit var customSearchService: CustomSearchService
 
     override fun create(dto: CreateContactDTO?): ContactDTO? {
         log.info("adding contact.... {}", dto)
@@ -48,7 +52,7 @@ class ContactServiceImpl : ContactService {
         val phoneNoList: List<String?> = ArrayList(phoneNos)
 
         //save phone numbers
-        phoneNumberService!!.addList(phoneNoList)
+        phoneNumberService.addList(phoneNoList)
         val phoneNumbers: MutableList<PhoneNumber> = ArrayList()
         for (phoneNumber in phoneNos) {
             //save phone numbers
@@ -64,7 +68,7 @@ class ContactServiceImpl : ContactService {
         log.info("deleting contact.... {}", name)
 
         //check if contact exist and not yet delete
-        if (contactRepository!!.existsByNameAndDelFlag(name, true)) {
+        if (!contactRepository.existsByNameAndDelFlag(name, true)) {
             throw GeneralException("contact not found!")
         }
 
@@ -78,15 +82,20 @@ class ContactServiceImpl : ContactService {
     }
 
     override fun getSingle(name: String?): ContactDTO? {
+
+        if (!contactRepository.existsByName(name)) {
+            throw GeneralException("contact not found!")
+        }
+
         return Contact.getContactDTO(
             Objects.requireNonNull<Contact?>(
-                contactRepository!!.findContactByName(name)
+                contactRepository.findContactByName(name)
             )
         )
     }
 
-    override fun getContacts(dto: ContactListRequestDTO?): ContactListDTO? {
-        val contactPage = customSearchService!!.searchContact(dto)
+    override fun getContacts(dto: ContactListRequestDTO): ContactListDTO? {
+        val contactPage = customSearchService.searchContact(dto)
         return getContactListDTO(contactPage)
     }
 
@@ -124,7 +133,7 @@ class ContactServiceImpl : ContactService {
         }
 
         //checking if name does not already exist
-        if (contactRepository!!.existsByName(dto.name)) {
+        if (contactRepository.existsByName(dto.name)) {
             throw GeneralException("name already exits for another contact!")
         }
 

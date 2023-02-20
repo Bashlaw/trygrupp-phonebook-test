@@ -3,6 +3,7 @@ package org.trygrupp.backend.customSearch.implementation
 import lombok.RequiredArgsConstructor
 import lombok.extern.slf4j.Slf4j
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
@@ -35,15 +36,16 @@ class CustomSearchServiceIml : CustomSearchService {
 
     private val log = LoggerFactory.getLogger(this::class.java)
 
-    private val phoneNumberService: PhoneNumberService? = null
+    @Autowired
+    lateinit var phoneNumberService: PhoneNumberService
 
     @PersistenceContext
-    private val em: EntityManager? = null
+    lateinit var em: EntityManager
 
-    override fun searchContact(dto: ContactListRequestDTO?): Page<Contact?>? {
+    override fun searchContact(dto: ContactListRequestDTO): Page<Contact?>? {
         log.info("search through contact...")
 
-        val cb = em!!.criteriaBuilder
+        val cb = em.criteriaBuilder
         val cq = cb.createQuery(
             Contact::class.java
         )
@@ -53,16 +55,16 @@ class CustomSearchServiceIml : CustomSearchService {
         )
         val predicates: MutableList<Predicate> = ArrayList()
 
-        if (valid(dto!!.name)) {
-            predicates.add(cb.like(cb.lower(root.get("name")), '%'.toString() + dto.name!!.lowercase() + '%'))
+        if (valid(dto.name)) {
+            predicates.add(cb.like(cb.lower(root.get("name")), '%'.toString() + dto.name.lowercase() + '%'))
         }
 
         if (valid(dto.address)) {
-            predicates.add(cb.like(cb.lower(root.get("address")), '%'.toString() + dto.address!!.lowercase() + '%'))
+            predicates.add(cb.like(cb.lower(root.get("address")), '%'.toString() + dto.address.lowercase() + '%'))
         }
 
         //see if search phone number exist
-        val phoneIds = phoneNumberService!!.searchPhoneNo(dto.phoneNumber)!!
+        val phoneIds = phoneNumberService.searchPhoneNo(dto.phoneNumber)!!
         if (phoneIds.isNotEmpty()) {
             for (id in phoneIds) {
                 predicates.add(cb.equal(root.get<Any>("phoneNumbersId"), id))

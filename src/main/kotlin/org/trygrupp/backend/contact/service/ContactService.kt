@@ -13,6 +13,6 @@ interface ContactService {
 
     fun getSingle(name: String?): ContactDTO?
 
-    fun getContacts(dto: ContactListRequestDTO?): ContactListDTO?
+    fun getContacts(dto: ContactListRequestDTO): ContactListDTO?
 
 }

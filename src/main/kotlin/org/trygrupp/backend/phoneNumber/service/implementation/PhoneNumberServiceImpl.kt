@@ -3,6 +3,7 @@ package org.trygrupp.backend.phoneNumber.service.implementation
 import lombok.RequiredArgsConstructor
 import lombok.extern.slf4j.Slf4j
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.trygrupp.backend.phoneNumber.model.PhoneNumber
 import org.trygrupp.backend.phoneNumber.repositrory.PhoneNumberRepository
@@ -15,7 +16,8 @@ class PhoneNumberServiceImpl : PhoneNumberService {
 
     private val log = LoggerFactory.getLogger(this::class.java)
 
-    private val phoneNumberRepository: PhoneNumberRepository? = null
+    @Autowired
+    lateinit var phoneNumberRepository: PhoneNumberRepository
 
     override fun add(phoneNo: String?) {
         log.info("adding phone number {}", phoneNo)
@@ -24,7 +26,7 @@ class PhoneNumberServiceImpl : PhoneNumberService {
         phoneNumber.phoneNo = phoneNo
 
         //save to DB
-        phoneNumberRepository!!.save(phoneNumber)
+        phoneNumberRepository.save(phoneNumber)
     }
 
     override fun addList(phoneNo: List<String?>?) {
@@ -38,15 +40,15 @@ class PhoneNumberServiceImpl : PhoneNumberService {
         }
 
         //save all to DB
-        phoneNumberRepository!!.saveAll(phoneNumbers)
+        phoneNumberRepository.saveAll(phoneNumbers)
     }
 
     override fun getPhoneNos(contactId: Long?): List<String?>? {
-        return phoneNumberRepository!!.getPhoneNums(contactId)
+        return phoneNumberRepository.getPhoneNums(contactId)
     }
 
     override fun searchPhoneNo(phoneNo: String?): List<Long?>? {
-        return phoneNumberRepository!!.getPhoneIds(phoneNo)
+        return phoneNumberRepository.getPhoneIds(phoneNo)
     }
 
 }
