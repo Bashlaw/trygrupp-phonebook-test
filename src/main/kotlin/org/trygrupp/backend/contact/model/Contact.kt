@@ -45,7 +45,9 @@ class Contact : BaseEntity() {
                     phoneList?.plus(phoneNumber.phoneNo)
                 }
             }
+
             contactDTO.phoneNumber = phoneList
+
             return contactDTO
         }
     }

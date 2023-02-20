@@ -9,4 +9,6 @@ interface ContactRepository : JpaRepository<Contact?, Long?> {
 
     fun existsByNameAndDelFlag(name: String?, delFlag: Boolean): Boolean
 
+    fun findContactByName(name: String?): Contact?
+
 }
