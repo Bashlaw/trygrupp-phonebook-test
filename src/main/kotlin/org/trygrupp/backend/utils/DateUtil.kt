@@ -8,27 +8,6 @@ import java.util.*
 
 object DateUtil {
 
-    fun dateFormat(date: String?): Date? {
-        var date1: Date? = null
-        val format: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        try {
-            date1 = format.parse(date)
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        return date1
-    }
-
-    fun dateToString(date: Date?): String {
-        val format: DateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
-        return format.format(date)
-    }
-
-    fun dateToJoinedString(date: Date?): String {
-        val format: DateFormat = SimpleDateFormat("yyyyMMdd")
-        return format.format(date)
-    }
-
     fun dateTimeFullFormat(date: String): Date? {
         var date1: Date? = null
         val dateTime = "$date 00:00:00"
@@ -66,18 +45,6 @@ object DateUtil {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val today = simpleDateFormat.format(todayDate)
         return dateTimeFullFormat(today)
-    }
-
-    fun calculateAge(year: Int, month: Int, day: Int): Int {
-        val dob = LocalDate.of(year, month, day)
-        val curDate = LocalDate.now()
-        //calculates the amount of time between two dates and returns the years
-        return Period.between(dob, curDate).years
-    }
-
-    fun isSameMonth(date1: Date?, date2: Date?): Boolean {
-        val fmt = SimpleDateFormat("yyyyMM")
-        return fmt.format(date1) == fmt.format(date2)
     }
 
     fun todayDateInAnyYear(yearDiff: Int): Date? {
