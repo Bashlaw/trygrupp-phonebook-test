@@ -5,10 +5,10 @@ import lombok.EqualsAndHashCode
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-class SearchListRequestDTO : PageableRequestDTO() {
+open class SearchListRequestDTO : PageableRequestDTO() {
 
-    private val fromDate: String? = null
+    val fromDate: String? = null
 
-    private val toDate: String? = null
+    val toDate: String? = null
 
 }

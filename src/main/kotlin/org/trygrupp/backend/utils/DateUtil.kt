@@ -29,7 +29,7 @@ object DateUtil {
         return format.format(date)
     }
 
-    private fun dateTimeFullFormat(date: String): Date? {
+    fun dateTimeFullFormat(date: String): Date? {
         var date1: Date? = null
         val dateTime = "$date 00:00:00"
         val format: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -53,7 +53,7 @@ object DateUtil {
         return localDateTimeToDate(endOfDay)
     }
 
-    private fun dateToLocalDateTime(date: Date): LocalDateTime {
+    fun dateToLocalDateTime(date: Date): LocalDateTime {
         return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault())
     }
 
