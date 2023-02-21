@@ -22,7 +22,7 @@ RUN export JAVA_HOME
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN git clone https://Bashlaw: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@github.com/Bashlaw/trygrupp-phonebook-test.git;
 
-WORKDIR /Backend/
+WORKDIR /trygrupp-phonebook-test/
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN chmod +x ./gradlew
@@ -30,13 +30,13 @@ RUN chmod +x ./gradlew
 VOLUME /main-app
 
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-RUN ./gradlew phonebook:assemble
+RUN ./gradlew assemble
 
-WORKDIR /Backend/phonebook/build/libs/
+WORKDIR /trygrupp-phonebook-test/build/libs/
 
 FROM openjdk:8-jdk-alpine
 
-COPY --from=builder /Backend/phonebook/build/libs/phonebook-0.0.1-SNAPSHOT.jar ./
+COPY --from=builder /trygrupp-phonebook-test/build/libs/phonebook-0.0.1-SNAPSHOT.jar ./
 
 ENV JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
 
