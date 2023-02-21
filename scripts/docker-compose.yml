@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/pgdata
+    env_file: ./project.env
+
+  phonebook_service:
+    depends_on:
+      - postgres
+    build: ./docker/
+    container_name: phonebook_service
+    image: phonebook_image
+    ports:
+      - "8080:8080"
+    links:
+      - postgres:database
+    env_file:
+      - ./project.env
+
+volumes:
+  conf:
+  data:
+  import:
+  logs:
+  plugins:
+  sqlvolume:
+  uploads:
+  pgdata:
